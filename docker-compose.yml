@@ -1,6 +1,7 @@
-version: '3'
+version: '3.8'
 services:
   olivetced-database:
+    container_name: olivetced-database
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -14,6 +15,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_DATABASE: '${MYSQL_DATABASE}'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-ppass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   olivetced-directus:
     container_name: olivetced-directus
@@ -32,7 +38,8 @@ services:
     networks:
       - default
     depends_on:
-      - olivetced-database
+      olivetced-database:
+        condition: service_healthy
     environment:
       KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
       SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
