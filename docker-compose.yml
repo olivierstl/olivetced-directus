@@ -10,7 +10,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
-      - nginx-proxy
+      - default
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_DATABASE: '${MYSQL_DATABASE}'
@@ -30,7 +30,7 @@ services:
       # If you want to load extensions from the host
       - ./extensions:/directus/extensions
     networks:
-      - nginx-proxy
+      - default
     depends_on:
       - database
     environment:
