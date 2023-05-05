@@ -10,7 +10,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
-      - directus
+      - default
     environment:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_DATABASE: '${MYSQL_DATABASE}'
@@ -30,7 +30,7 @@ services:
       # If you want to load extensions from the host
       - ./extensions:/directus/extensions
     networks:
-      - directus
+      - default
     depends_on:
       - database
     environment:
@@ -52,7 +52,9 @@ services:
       PUBLIC_URL: 'https://admin.olivetced.fr'
 
 networks:
-  directus:
+  default:
+    external:
+      name: nginx-proxy
 
 volumes:
   mysql-data:
