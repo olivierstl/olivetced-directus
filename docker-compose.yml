@@ -1,10 +1,10 @@
 version: '3'
 services:
-  database:
+  olivetced-database:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 5101:3306
+      - 5101:${MYSQL_PORT}
     cap_add:
       - SYS_NICE
     volumes:
@@ -15,8 +15,8 @@ services:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
       MYSQL_DATABASE: '${MYSQL_DATABASE}'
 
-  directus:
-    container_name: directus
+  olivetced-directus:
+    container_name: olivetced-directus
     image: directus/directus:latest
     ports:
       - 8055:8055
@@ -32,14 +32,14 @@ services:
     networks:
       - default
     depends_on:
-      - database
+      - olivetced-database
     environment:
       KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
       SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
 
       DB_CLIENT: 'mysql'
-      DB_HOST: 'database'
-      DB_PORT: '3306'
+      DB_HOST: '${MYSQL_HOST}'
+      DB_PORT: '${MYSQL_PORT}'
       DB_DATABASE: '${MYSQL_DATABASE}'
       DB_USER: 'root'
       DB_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
